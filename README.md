@@ -18,7 +18,7 @@ Or choose a directory explicitly:
 omp-workspace C:\path\to\repository
 ```
 
-On Windows, the launcher opens Edge in an app window (Chrome/browser fallback), reuses the running workspace for that launch directory, and uses a private browser profile. On macOS, it opens the default browser. It does not change your global omp settings, credentials, theme, model, or installed extensions. The terminal is your installed omp, not a simulated chat client.
+On Windows, the launcher opens Edge in an app window (Chrome/browser fallback), reuses the running workspace for that launch directory, and uses a private browser profile. The macOS app uses a native WebKit window with its own gear icon in Finder and the Dock. It does not change your global omp settings, credentials, theme, model, or installed extensions. The terminal is your installed omp, not a simulated chat client.
 
 Closing the window or hiding a pane **keeps chats running**. Stop one with its terminal's × button; use **? → Stop workspace** to stop all owned chats and the local server. Equivalent shell command:
 
@@ -89,9 +89,11 @@ npm run package:mac
 
 The builder downloads the official Node runtime matching the build process's version and architecture, verifies its SHA-256 checksum, installs locked production dependencies in an isolated app bundle, and compiles a native launcher. Before creating and verifying the disk image, it checks code signatures, exercises the bundled native PTY, and checks the bundled server's authenticated HTTP startup/shutdown. Output: `dist/OMP-Workspace-1.0.0-macos-arm64.dmg` or `dist/OMP-Workspace-1.0.0-macos-x64.dmg`.
 
-Requires macOS 13+ and a separately installed/configured `omp` accessible through your login-shell PATH (or `OMP_BIN`). Node.js is bundled for the workspace; it does not bundle omp, model credentials, or your sessions. Open the disk image, drag **OMP Workspace.app** to **Applications**, then launch it. It starts in `~/Projects` when present, otherwise your home directory; select a repository using the header folder button. Closing the browser keeps chats running; **? → Stop workspace** shuts them down. State is stored in `~/.local/share/omp-workspace`.
+Requires macOS 13+ and a separately installed/configured `omp` accessible through your zsh login PATH (or `OMP_BIN`). Node.js is bundled for the workspace; it does not bundle omp, model credentials, or your sessions. Open the disk image, drag **OMP Workspace.app** to **Applications**, then launch it. It starts in `~/Projects` when present, otherwise your home directory; select a repository using the header folder button. Closing the native window keeps chats running; **? → Stop workspace** shuts them down. State is stored in `~/.local/share/omp-workspace`.
 
-Builds are ad-hoc signed, **not Developer ID signed or notarized**. Gatekeeper may block a downloaded app; only if you trust the build, allow it through **System Settings → Privacy & Security → Open Anyway**. Do not disable Gatekeeper globally. Apple Silicon and Intel builds passed compilation, code-signature verification, bundled native PTY and authenticated server checks, and disk-image verification on GitHub macOS runners. Finder installation, the launcher UI, and real omp chats on macOS have not been verified.
+Builds are ad-hoc signed, **not Developer ID signed or notarized**. Gatekeeper may block a downloaded app; only if you trust the build, allow it through **System Settings → Privacy & Security → Open Anyway**. Do not disable Gatekeeper globally. Apple Silicon and Intel builds passed compilation, code-signature verification, bundled native PTY and authenticated server checks, and disk-image verification on GitHub macOS runners. Both native application windows were launched and captured; each installer archive includes a UI screenshot. Real omp chats on macOS have not been verified because the build runners do not include omp.
+
+The original eight-tooth gear/terminal logo lives in `public/icon.svg`, with derived PNG/ICO assets for Mac packaging and Windows shortcuts. `install.ps1` applies the gear to Desktop/Start Menu shortcuts; rerun it to update an existing installation. The Windows runtime still uses a browser-owned window, so its running taskbar icon can remain Edge/Chrome.
 
 
 ## Verification
@@ -103,6 +105,7 @@ Exercised through the actual browser UI and installed omp: two native terminals,
 ### 1.0.0
 
 - Added Apple Silicon/Intel macOS `.app`/`.dmg` packaging with a bundled Node runtime, native launcher, build-time native PTY/server checks, and downloadable GitHub Actions artifacts.
+- Added original orange gear branding for browser/header icons, Windows shortcuts, and macOS app icons; replaced the Mac browser launcher with a native WebKit window and verified native-window screenshots on both Mac architectures.
 
 - Added the screenshot-style Windows workspace shell, native terminal sessions, persistent chat resume, live agent bridge, and safe reader/editor.
 - Added desktop/command launchers, private loopback access, split restoration, and explicit shutdown controls.
