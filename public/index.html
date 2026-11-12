@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>omp / workspace</title>
+  <link rel="stylesheet" href="/vendor/xterm.css">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <button id="toggle-nav" class="icon-button" title="Toggle navigator" aria-label="Toggle navigator">☰</button>
+    <span class="wordmark">omp<span class="wordmark-slash"> / </span><span class="wordmark-sub">workspace</span></span>
+    <span class="top-divider"></span>
+    <button id="choose-root" class="root-button" title="Choose repository"><span class="folder-icon">▱</span><span id="repo-name">connecting…</span><span class="muted">⌄</span></button>
+    <span id="branch" class="branch"></span>
+    <span id="connection" class="connection" role="status">CONNECTING</span>
+    <div class="top-actions">
+      <button id="new-chat" title="New chat · Ctrl+Alt+N"><span class="accent">+</span> <span>New chat</span></button>
+      <button id="split-pane" title="Split terminal · Ctrl+Alt+S">◫ <span>Split</span></button>
+      <button id="toggle-reader" title="Toggle reader · Ctrl+Alt+R" aria-pressed="true">▤ <span>Reader</span></button>
+      <button id="show-help" class="icon-button" title="Workspace controls" aria-label="Workspace controls">?</button>
+    </div>
+  </header>
+  <main id="workspace" class="workspace">
+    <aside id="navigator" class="navigator" aria-label="Workspace navigator">
+      <section class="nav-section repository-section">
+        <div class="section-heading"><span>EXPLORER</span><button id="refresh-tree" class="icon-button" title="Refresh file tree" aria-label="Refresh file tree">↻</button></div>
+        <div class="filter-wrap"><span>⌕</span><input id="tree-filter" type="search" placeholder="Filter loaded files…" aria-label="Filter loaded files" autocomplete="off" spellcheck="false"></div>
+        <div id="tree" class="tree" role="tree" aria-label="Repository files"></div>
+      </section>
+      <section class="nav-section agents-section">
+        <div class="section-heading"><span>AGENTS</span><button id="agent-hub" title="Open native Agent Hub · Alt+A">Hub ↗</button></div>
+        <div id="agents" class="nav-list"></div>
+      </section>
+      <section class="nav-section chats-section">
+        <div class="section-heading"><span>CHATS</span><button id="sidebar-new" class="icon-button" title="New chat" aria-label="New chat">+</button></div>
+        <div id="chats" class="nav-list"></div>
+      </section>
+      <div id="root-path" class="root-path" title="Current repository"></div>
+    </aside>
+    <div id="nav-resizer" class="resizer" role="separator" tabindex="0" aria-label="Resize navigator" aria-orientation="vertical"></div>
+    <section id="terminals" class="terminals" aria-label="Terminal panes">
+      <div id="empty-terminals" class="empty-terminals"><span class="empty-symbol">›_</span><h1>Your workspace, live.</h1><p>Open an omp terminal to get started.</p><button id="empty-new" class="primary-button">+ New chat</button></div>
+    </section>
+    <div id="reader-resizer" class="resizer" role="separator" tabindex="0" aria-label="Resize reader" aria-orientation="vertical"></div>
+    <aside id="reader" class="reader" aria-label="File and agent reader">
+      <div class="reader-heading"><span id="reader-kind">WORKSPACE</span><button id="close-reader" class="icon-button" title="Hide reader" aria-label="Hide reader">×</button></div>
+      <div id="reader-content" class="reader-content"></div>
+    </aside>
+  </main>
+  <footer class="statusbar"><div><span class="status-dot"></span><span id="footer-status">Connecting to local workspace</span></div><div class="footer-shortcuts"><span><kbd>Alt 1/2</kbd> focus</span><span><kbd>Ctrl Alt S</kbd> split</span><span><kbd>Ctrl Alt R</kbd> reader</span><span><kbd>Ctrl Shift ↵</kbd> zoom</span></div><span id="footer-position">local</span></footer>
+  <div id="terminal-storage" hidden></div>
+  <div id="notices" class="notices" aria-live="polite" aria-atomic="false"></div>
+  <dialog id="root-dialog">
+    <form id="root-form">
+      <div class="dialog-heading"><h2>Open repository</h2><button id="cancel-root" type="button" class="icon-button" aria-label="Cancel">×</button></div>
+      <p>Choose an existing folder. Live terminals keep their current working directory.</p>
+      <label for="root-input">Absolute folder path</label>
+      <input id="root-input" type="text" required spellcheck="false" autocomplete="off" placeholder="C:\\Users\\you\\Projects\\repo">
+      <p id="root-error" class="inline-error" role="alert"></p>
+      <div class="dialog-actions"><button id="root-cancel-button" type="button">Cancel</button><button id="root-submit" type="submit" class="primary-button">Open folder</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

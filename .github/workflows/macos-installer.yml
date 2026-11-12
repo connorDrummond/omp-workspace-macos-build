@@ -1,0 +1,43 @@
+name: macOS installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    name: macOS ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+          - arch: x64
+            runner: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          architecture: ${{ matrix.arch }}
+      - name: Build and verify DMG
+        run: npm run package:mac
+      - name: Upload installer
+        id: installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: OMP-Workspace-macos-${{ matrix.arch }}
+          path: dist/*.dmg
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish download link
+        env:
+          INSTALLER_URL: ${{ steps.installer.outputs.artifact-url }}
+        run: |
+          printf 'Download the macOS %s installer archive: %s\n' '${{ matrix.arch }}' "$INSTALLER_URL" >> "$GITHUB_STEP_SUMMARY"
