@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>OMP Workspace</title>
+  <desc>An orange eight-tooth gear surrounding a terminal prompt on a charcoal tile.</desc>
+  <rect x="48" y="48" width="928" height="928" rx="208" fill="#202226"/>
+  <g fill="#f08a33">
+    <circle cx="512" cy="512" r="292"/>
+    <rect x="440" y="144" width="144" height="210" rx="24"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(45 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(90 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(135 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(180 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(225 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(270 512 512)"/>
+    <rect x="440" y="144" width="144" height="210" rx="24" transform="rotate(315 512 512)"/>
+  </g>
+  <circle cx="512" cy="512" r="188" fill="#202226"/>
+  <path d="m426 442 76 70-76 70m114 0h78" fill="none" stroke="#f5eee3" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -42,6 +42,8 @@ const publicFiles = new Map([
   ['/index.html', ['public/index.html', 'text/html; charset=utf-8']],
   ['/app.mjs', ['public/app.mjs', 'text/javascript; charset=utf-8']],
   ['/style.css', ['public/style.css', 'text/css; charset=utf-8']],
+  ['/icon.svg', ['public/icon.svg', 'image/svg+xml']],
+  ['/favicon.ico', ['public/icon.ico', 'image/x-icon']],
   ['/vendor/xterm.mjs', ['node_modules/@xterm/xterm/lib/xterm.mjs', 'text/javascript; charset=utf-8']],
   ['/vendor/addon-fit.mjs', ['node_modules/@xterm/addon-fit/lib/addon-fit.mjs', 'text/javascript; charset=utf-8']],
   ['/vendor/xterm.css', ['node_modules/@xterm/xterm/css/xterm.css', 'text/css; charset=utf-8']],

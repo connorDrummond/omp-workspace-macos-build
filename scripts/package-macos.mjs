@@ -46,6 +46,16 @@ async function build() {
     const workspace = path.join(resources, 'workspace');
     await mkdir(binaries, {recursive: true});
     await mkdir(workspace, {recursive: true});
+    const iconset = path.join(temporary, 'Workspace.iconset');
+    await mkdir(iconset);
+    const iconSource = path.join(root, 'public', 'icon-1024.png');
+    for (const size of [16, 32, 128, 256, 512]) {
+      for (const scale of [1, 2]) {
+        const pixels = size * scale;
+        await exec('sips', ['-z', String(pixels), String(pixels), iconSource, '--out', path.join(iconset, `icon_${size}x${size}${scale === 2 ? '@2x' : ''}.png`)]);
+      }
+    }
+    await exec('iconutil', ['-c', 'icns', iconset, '-o', path.join(resources, 'Workspace.icns')]);
 
     // Fetch the official standalone runtime, not a Homebrew-linked host binary.
     const archiveName = `node-${process.version}-darwin-${process.arch}.tar.gz`;
@@ -79,7 +89,7 @@ async function build() {
     await exec('codesign', ['--force', '--sign', '-', node]);
 
     const target = `${process.arch === 'x64' ? 'x86_64' : 'arm64'}-apple-macosx13.0`;
-    await exec('swiftc', ['-O', '-target', target, '-framework', 'AppKit', path.join(root, 'packaging', 'macos', 'main.swift'), '-o', path.join(binaries, 'OMP Workspace')]);
+    await exec('swiftc', ['-O', '-target', target, '-framework', 'AppKit', '-framework', 'WebKit', path.join(root, 'packaging', 'macos', 'main.swift'), '-o', path.join(binaries, 'OMP Workspace')]);
     await writeFile(path.join(contents, 'Info.plist'), `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
@@ -87,11 +97,15 @@ async function build() {
 <key>CFBundleDisplayName</key><string>OMP Workspace</string>
 <key>CFBundleIdentifier</key><string>local.omp.workspace</string>
 <key>CFBundleExecutable</key><string>OMP Workspace</string>
+<key>CFBundleIconFile</key><string>Workspace.icns</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>${xml(metadata.version)}</string>
 <key>CFBundleVersion</key><string>${xml(metadata.version)}</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>
-<key>LSUIElement</key><true/>
+<key>NSAppTransportSecurity</key><dict>
+<key>NSAllowsLocalNetworking</key><true/>
+<key>NSAllowsArbitraryLoadsInWebContent</key><true/>
+</dict>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>
 `);

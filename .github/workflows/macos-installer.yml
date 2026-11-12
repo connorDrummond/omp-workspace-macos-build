@@ -28,12 +28,45 @@ jobs:
           architecture: ${{ matrix.arch }}
       - name: Build and verify DMG
         run: npm run package:mac
+      - name: Capture native application window
+        run: |
+          mount="$RUNNER_TEMP/omp-workspace-image"
+          hdiutil attach dist/*.dmg -readonly -nobrowse -mountpoint "$mount"
+          trap 'hdiutil detach "$mount"' EXIT
+          open -n "$mount/OMP Workspace.app"
+          swift - <<'SWIFT'
+          import AppKit
+          import CoreGraphics
+          let deadline = Date().addingTimeInterval(60)
+          while Date() < deadline {
+              if let app = NSRunningApplication.runningApplications(withBundleIdentifier: "local.omp.workspace").first,
+                 let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]],
+                 let window = windows.first(where: { ($0[kCGWindowOwnerPID as String] as? Int32) == app.processIdentifier && ($0[kCGWindowName as String] as? String) == "OMP Workspace" }),
+                 let id = window[kCGWindowNumber as String] as? UInt32 {
+                  let capture = Process()
+                  capture.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
+                  capture.arguments = ["-x", "-l", String(id), "dist/macos-window.png"]
+                  try capture.run()
+                  capture.waitUntilExit()
+                  app.terminate()
+                  exit(capture.terminationStatus)
+              }
+              Thread.sleep(forTimeInterval: 0.5)
+          }
+          fputs("The native workspace window did not finish loading.\n", stderr)
+          exit(1)
+          SWIFT
+          root="$HOME"
+          if [[ -d "$HOME/Projects" ]]; then root="$HOME/Projects"; fi
+          "$mount/OMP Workspace.app/Contents/MacOS/node" "$mount/OMP Workspace.app/Contents/Resources/workspace/launch.mjs" --root "$root" --stop
       - name: Upload installer
         id: installer
         uses: actions/upload-artifact@v4
         with:
           name: OMP-Workspace-macos-${{ matrix.arch }}
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/macos-window.png
           if-no-files-found: error
           retention-days: 30
       - name: Publish download link

@@ -32,6 +32,7 @@ a { color: var(--blue); }
 .muted { color: var(--muted); }
 .accent { color: var(--amber); }
 .topbar { height: 43px; flex: 0 0 43px; border-bottom: 1px solid var(--line); background: #1c1e21; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 8px; user-select: none; }
+.app-logo { width: 28px; height: 28px; flex-shrink: 0; }
 .wordmark { color: #ece4d6; font-weight: 700; letter-spacing: -.5px; font-size: 14px; white-space: nowrap; }
 .wordmark-slash { color: var(--faint); font-weight: 400; }
 .wordmark-sub { font-weight: 400; font-size: 12px; letter-spacing: -.3px; color: #a9a9a4; }
