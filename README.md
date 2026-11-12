@@ -91,7 +91,7 @@ The builder downloads the official Node runtime matching the build process's ver
 
 Requires macOS 13+ and a separately installed/configured `omp` accessible through your login-shell PATH (or `OMP_BIN`). Node.js is bundled for the workspace; it does not bundle omp, model credentials, or your sessions. Open the disk image, drag **OMP Workspace.app** to **Applications**, then launch it. It starts in `~/Projects` when present, otherwise your home directory; select a repository using the header folder button. Closing the browser keeps chats running; **? → Stop workspace** shuts them down. State is stored in `~/.local/share/omp-workspace`.
 
-Builds are ad-hoc signed, **not Developer ID signed or notarized**. Gatekeeper may block a downloaded app; only if you trust the build, allow it through **System Settings → Privacy & Security → Open Anyway**. Do not disable Gatekeeper globally. macOS compilation, installation, and the launcher UI have not been verified from this Windows workstation.
+Builds are ad-hoc signed, **not Developer ID signed or notarized**. Gatekeeper may block a downloaded app; only if you trust the build, allow it through **System Settings → Privacy & Security → Open Anyway**. Do not disable Gatekeeper globally. Apple Silicon and Intel builds passed compilation, code-signature verification, bundled native PTY and authenticated server checks, and disk-image verification on GitHub macOS runners. Finder installation, the launcher UI, and real omp chats on macOS have not been verified.
 
 
 ## Verification
